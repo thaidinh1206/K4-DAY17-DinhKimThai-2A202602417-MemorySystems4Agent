@@ -1,19 +1,19 @@
-# Student Scaffold
+# Day 17 implementation
 
-This `src/` folder is the student version of the lab.
+The offline implementation runs without an API key and gives deterministic answers so both agents can be benchmarked on identical input.
 
-- It keeps the same high-level structure
-- The Python files are intentionally incomplete and contain pseudocode / TODOs
-- The benchmark structure should include: standard benchmark + long-context stress benchmark
-- The runtime should support these providers: `openai`, `custom`, `gemini`, `anthropic`, `ollama`, `openrouter`
+- `config.py` and `model_provider.py`: shared configuration and lazy model factory for six providers.
+- `memory_store.py`: `User.md` persistence, Vietnamese fact extraction, token estimation, and compact memory.
+- `agent_baseline.py`: full history within one thread only.
+- `agent_advanced.py`: persistent user profile and compact per-thread history.
+- `benchmark.py`: standard and long-context comparisons.
+- `test_agents.py`: memory behavior checks.
 
-Suggested flow:
+Run from the repository root:
 
-1. Start with `config.py`
-2. Implement `memory_store.py`
-3. Finish `agent_baseline.py`
-4. Finish `agent_advanced.py`
-5. Implement `benchmark.py`
-6. Make `test_agents.py` pass
+```powershell
+.venv/Scripts/python.exe src/benchmark.py
+.venv/Scripts/python.exe -m pytest src/test_agents.py -v
+```
 
-Datasets are available at the repo root in `data/`.
+The benchmark writes profiles under ignored `state/benchmark_*` folders and resets dataset users before each run. See `../Report.md` for sample results and interpretation. The provider factory is available for a later live-agent extension; both agents currently run in offline mode.
